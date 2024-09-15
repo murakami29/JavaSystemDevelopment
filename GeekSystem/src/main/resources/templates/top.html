@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理者TOP画面</title>
+    <!-- Bootstrap CSSを読み込む -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">管理者TOP画面</h1>
+
+        <div class="d-grid gap-3">
+            <a href="/admin/profile/details" class="btn btn-secondary btn-block">管理者プロフィール</a>
+            <a href="/store" class="btn btn-secondary btn-block">店舗管理</a>
+            <a href="/admin/management" class="btn btn-secondary btn-block">管理者管理</a>
+            <a href="/product" class="btn btn-secondary btn-block">商品管理</a>
+            <a href="/order-history" class="btn btn-secondary btn-block">商品発注履歴管理</a>
+            <a href="/manufacturer" class="btn btn-secondary btn-block">メーカ管理</a>
+            <a href="/category" class="btn btn-secondary btn-block">カテゴリ管理</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JSと依存ライブラリを読み込む -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
