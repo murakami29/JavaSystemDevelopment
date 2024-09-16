@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>店舗管理編集</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .btn-row {
+	        margin-top: 20px;
+	    }
+		.btn-row .btn {
+		    width: 100%;
+		}
+		.btn-spacing {
+		    margin-bottom: 10px; /* ボタンの間のスペースを作る */
+		}
+	</style>
+	</head>
+<body>
+    <div class="container mt-4">
+        <h1>店舗管理編集</h1>
+        <form th:object="${storeEditForm}" th:action="@{/store/edit}" method="post">
+			<input type="hidden" th:field="*{storeId}"> <!--隠しフィールド-->
+			<input type="hidden" name="_csrf" value="${_csrf.token}"/>
+			<div class="form-group">
+			    <label for="storeId">店舗ID</label>
+			    <input type="text" class="form-control" id="storeId" th:value="*{storeId}"readonly>
+			</div>
+			<div class="form-group">
+			    <label for="store">店舗名</label>
+			    <input type="text" class="form-control" id="storeName" name="name" th:value="*{name}">
+			</div>
+            <div class="form-group">
+                <label for="storeAddress">店舗住所</label>
+                <input type="text" class="form-control" id="storeAddress" name="address" th:value="*{address}">
+            </div>
+			<div class="row btn-row">
+				<div class="col-md-6 btn-spacing">
+				    <button type="submit" class="btn btn-primary">更新する</button>
+				</div>
+				<div class="col-md-6">
+					<a href="/store/details" class="btn btn-secondary">店舗管理詳細へ戻る</a>
+				</div>
+			</div>
+        </form>
+    </div>
+	
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

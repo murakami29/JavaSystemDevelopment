@@ -24,4 +24,9 @@ public class StoreServiceImpl implements StoreService {
     public Optional<Store> findById(Long id) {
         return storeRepository.findById(id);
     }
+    
+    @Override
+    public void save(com.example.demo.entity.Store store) {
+        storeRepository.save(store);
+    }
 }
