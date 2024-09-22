@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,4 +19,6 @@ public interface UserService extends UserDetailsService {
     Optional<User> findById(Long id);
     
     void save(User user); // ユーザー情報を保存
+    
+    List<User> findAll();  // 全てのユーザー情報を取得
 }

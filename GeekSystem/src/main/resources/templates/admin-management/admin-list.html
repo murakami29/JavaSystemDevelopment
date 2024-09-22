@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>管理者一覧</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .btn-row {
+	        margin-top: 20px;
+	    }
+		.btn-row .btn {
+		    width: 100%;
+		}
+		.btn-spacing {
+		    margin-bottom: 10px; /* ボタンの間のスペースを作る */
+		}
+	</style>
+</head>
+<body>
+    <div class="container mt-4">
+		<!-- エラーメッセージがある場合に表示 -->
+		<div th:if="${errorMessage}" class="alert alert-danger">
+		    <p th:text="${errorMessage}"></p>
+		</div>
+		
+        <h1>管理者一覧</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>店舗名</th>
+                    <th>役職名</th>
+                    <th>権限名</th>
+                    <th>名</th>
+                    <th>姓</th>
+                    <th>詳細</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 管理者リストを繰り返し表示 -->
+                <tr th:each="admin : ${adminList}">
+                    <td th:text="${admin.id}">1</td>
+                    <td th:text="${admin.store.name}">1001</td>
+                    <td th:text="${admin.role.name}">3</td>
+                    <td th:text="${admin.permission.name}">1</td>
+                    <td th:text="${admin.firstName}">Taro</td>
+                    <td th:text="${admin.lastName}">Yamada</td>
+                    <td>
+                        <!-- 詳細ボタン -->
+                        <a th:href="@{/admin/details/{id}(id=${admin.id})}" class="btn btn-secondary">詳細</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+		<div class="row btn-row">
+			<div class="col-md-6 btn-spacing">
+			    <a th:href="@{/admin/create}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_ADMIN')">新規作成</a>
+			</div>
+			<div class="col-md-6">
+				<a href="/home" class="btn btn-secondary">TOPページへ戻る</a>
+			</div>
+		</div>
+    </div>
+
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class AdminProfileForm {
-    
+public class AdminEditForm {
+
     @NotNull
     private Long id; // ユーザーID
 
@@ -31,4 +31,5 @@ public class AdminProfileForm {
 
     @NotNull
     private String phone; // 電話番号
+    
 }
