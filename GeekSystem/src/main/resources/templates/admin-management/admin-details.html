@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>管理者詳細</title>
@@ -68,10 +68,10 @@
         </table>
         <div class="row btn-row">
 			<div class="col-md-4 btn-spacing">
-				<a th:href="@{/admin/edit/{id}(id=${admin.id})}" class="btn btn-primary">編集</a>
+				<a th:href="@{/admin/edit/{id}(id=${admin.id})}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_ADMIN')">編集</a>
 			</div>
 			
-			<div class="col-md-4 btn-spacing">
+			<div class="col-md-4 btn-spacing" sec:authorize="hasAuthority('ROLE_ADMIN')">
 				<form th:action="@{/admin/delete/{id}(id=${admin.id})}" method="POST" class="d-inline-block w-100">
 				    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 					<button type="submit" th:onclick="'return confirm(\'管理者情報を削除してもよろしいですか？\');'" class="btn btn-danger">削除</button>

@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,6 +54,9 @@ public class AdminManagementController {
     @GetMapping("/admin/list")
     public String showAdminList(Model model, Authentication authentication) {
         
+    	authentication = SecurityContextHolder.getContext().getAuthentication();
+    	System.out.println("Authorities: " + authentication.getAuthorities());
+
         List<User> adminList = userService.findAll();
 
         if (adminList.isEmpty()) {
@@ -84,6 +89,7 @@ public class AdminManagementController {
         return "admin-management/admin-details"; // テンプレートファイルへのパス
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/edit/{id}")
     public String showAdminEditForm(@PathVariable("id") Long id, Model model) {
         Optional<User> userOptional = userService.findById(id);
@@ -117,6 +123,7 @@ public class AdminManagementController {
         return "admin-management/admin-edit";
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/edit/{id}")
     public String updateAdmin(@PathVariable("id") Long id, @ModelAttribute("adminEditForm") AdminEditForm form, Model model) {
         Optional<User> userOptional = userService.findById(id);
@@ -145,6 +152,7 @@ public class AdminManagementController {
         return "redirect:/admin/edit/complete/{id}";
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/edit/complete/{id}")
     public String editComplete(Model model, @PathVariable("id") Long id) {
         model.addAttribute("adminId", id);
@@ -162,6 +170,7 @@ public class AdminManagementController {
         return "admin-management/admin-create";
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/create")
     public String createAdmin(@Valid @ModelAttribute AdminCreateForm adminCreateForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -193,11 +202,13 @@ public class AdminManagementController {
         return "redirect:/admin/create/complete"; // 完了画面にリダイレクト
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/create/complete")
     public String showAdminCreateComplete() {
         return "admin-management/admin-create-complete";  // 対応するテンプレート名を返す
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/delete/{id}")
     public String deleteAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {

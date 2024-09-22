@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,9 +34,9 @@ public class UserServiceImpl implements UserService {
         String roleName;
         
         if ("管理者".equals(permissionName)) {
-            roleName = "ADMIN";
+            roleName = "ROLE_ADMIN";
         } else if ("一般".equals(permissionName)) {
-            roleName = "USER";
+            roleName = "ROLE_USER";
         } else {
             throw new IllegalStateException("不明な権限名: " + permissionName);
         }
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         return User.builder()
                 .username(userEntity.getEmail())
                 .password(userEntity.getPassword())
-                .roles(roleName) // ユーザーのロールを設定
+                .authorities(new SimpleGrantedAuthority(roleName)) // ユーザーのロールを設定
                 .build();
     }
     

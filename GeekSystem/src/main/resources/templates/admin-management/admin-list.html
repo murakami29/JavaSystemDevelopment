@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>管理者一覧</title>
@@ -55,7 +55,7 @@
         </table>
 		<div class="row btn-row">
 			<div class="col-md-6 btn-spacing">
-			    <a th:href="@{/admin/create}" class="btn btn-primary">新規作成</a>
+			    <a th:href="@{/admin/create}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_ADMIN')">新規作成</a>
 			</div>
 			<div class="col-md-6">
 				<a href="/home" class="btn btn-secondary">TOPページへ戻る</a>

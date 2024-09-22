@@ -23,6 +23,9 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/resources/**", "/store/details").permitAll()
+                // 管理者権限が必要なURLを指定
+                .requestMatchers("/admin/edit/**", "/admin/delete/**", "/admin/create/**")
+                	.hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> 
