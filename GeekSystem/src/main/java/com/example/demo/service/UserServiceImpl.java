@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,12 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public void save(com.example.demo.entity.User user) {
+    	
         userRepository.save(user);
+    }
+    
+    @Override
+    public List<com.example.demo.entity.User> findAll() {
+        return userRepository.findAll();
     }
 }

@@ -5,10 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class AdminProfileForm {
-    
-    @NotNull
-    private Long id; // ユーザーID
+public class AdminCreateForm {
 
     @NotNull
     private Long storeId; // 店舗ID
@@ -31,4 +28,8 @@ public class AdminProfileForm {
 
     @NotNull
     private String phone; // 電話番号
+    
+    @NotNull
+    private String password; // パスワード
+    
 }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理者作成</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>管理者作成</h1>
+        <form th:action="@{/admin/create}" th:object="${adminCreateForm}" method="post">
+			<!-- 店舗選択 -->
+			<div class="form-group">
+			    <label for="storeId">店舗</label>
+			    <select id="storeId" class="form-control" th:field="*{storeId}">
+			        <option th:each="store : ${stores}" th:value="${store.id}" th:text="${store.name}"></option>
+			    </select>
+			</div>
+			
+			<!-- 役職選択 -->
+			<div class="form-group">
+			    <label for="roleId">役職</label>
+			    <select id="roleId" class="form-control" th:field="*{roleId}">
+			        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+			    </select>
+			</div>
+			
+			<!-- 権限選択 -->
+			<div class="form-group">
+			    <label for="permissionId">権限</label>
+			    <select id="permissionId" class="form-control" th:field="*{permissionId}">
+			        <option th:each="permission : ${permissions}" th:value="${permission.id}" th:text="${permission.name}"></option>
+			    </select>
+			</div>
+
+            <div class="form-group">
+                <label for="firstName">名</label>
+                <input type="text" id="firstName" th:field="*{firstName}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">姓</label>
+                <input type="text" id="lastName" th:field="*{lastName}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="email">メールアドレス</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">電話番号</label>
+                <input type="text" id="phone" th:field="*{phone}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">パスワード</label>
+                <input type="password" id="password" th:field="*{password}" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">作成</button>
+        </form>
+    </div>
+
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
