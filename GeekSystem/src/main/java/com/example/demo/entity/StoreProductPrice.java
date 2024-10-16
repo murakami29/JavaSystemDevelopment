@@ -43,4 +43,9 @@ public class StoreProductPrice {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt; // 更新タイムスタンプ
+    
+    @Override
+    public String toString() {
+        return "StoreProductPrice{productId=" + product.getId() + ", storeId=" + store.getId() + ", price=" + price + "}"; // 必要なプロパティだけ返す
+    }
 }

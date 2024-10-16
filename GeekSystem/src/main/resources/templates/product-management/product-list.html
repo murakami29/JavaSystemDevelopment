@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>商品管理一覧</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-row {
+            margin-top: 20px;
+        }
+        .btn-row .btn {
+            width: 100%;
+        }
+        .btn-spacing {
+            margin-bottom: 10px; /* ボタンの間のスペースを作る */
+        }
+        .pagination {
+            margin-top: 20px;
+            cursor: pointer;
+        }
+		
+
+
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
+        <h1>商品管理一覧</h1>
+
+        <form id="searchForm" th:action="@{/product/list}" th:object="${searchForm}" method="get" class="mb-4">
+            <!-- 大カテゴリ -->
+            <div class="form-group">
+                <label for="largeCategoryId">大カテゴリ</label>
+                <select id="largeCategoryId" class="form-control" th:field="*{largeCategoryId}">
+                    <option value="">選択してください</option> 
+                    <option th:each="largeCategory : ${largeCategories}" th:value="${largeCategory.id}" th:text="${largeCategory.name}"></option>
+                </select>
+            </div>
+            <!-- 中カテゴリ -->
+            <div class="form-group">
+                <label for="middleCategoryId">中カテゴリ</label>
+                <select id="middleCategoryId" class="form-control" th:field="*{middleCategoryId}">
+					<option value="">選択してください</option> 
+                    <option th:each="middlecategory : ${middleCategories}" th:value="${middlecategory.id}" th:text="${middlecategory.name}"></option>
+                </select>
+            </div>
+            <!-- 小カテゴリ -->
+            <div class="form-group">
+                <label for="smallCategoryId">小カテゴリ</label>
+                <select id="smallCategoryId" class="form-control" th:field="*{smallCategoryId}">
+					<option value="">選択してください</option> 
+                    <option th:each="smallcategory : ${smallCategories}" th:value="${smallcategory.id}" th:text="${smallcategory.name}"></option>
+                </select>
+            </div>
+            <!-- フリーワード検索 -->
+            <div class="form-group">
+                <label for="searchKeyword">🔍検索</label>
+                <input type="text" id="searchKeyword" class="form-control" name="keyword" th:value="${keyword}" placeholder="商品名やカテゴリ名で検索">
+            </div>
+
+            <div class="row btn-row">
+				<div class="col-md-6 btn-spacing">
+                	<button type="submit" class="btn btn-primary">検索</button>
+				</div>
+				<div class="col-md-6">
+					<button type="reset" id="resetButton" class="btn btn-secondary">リセット</button>
+				</div>
+			</div>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>商品ID</th>
+                    <th>小カテゴリ</th>
+                    <th>メーカー</th>
+                    <th>商品名</th>
+                    <th>仕入れ原価</th>
+                    <th>メーカ希望小売価格</th>
+                    <th>作成日時</th>
+                    <th>詳細</th>
+                </tr>
+            </thead>
+			<tbody id="product-list">
+			    <!-- 商品リストがここに動的に追加されます -->
+			</tbody>
+			
+<!--            <tbody>-->
+<!--                <tr th:each="product : ${productList}">-->
+<!--                    <td th:text="${product.id}">1</td>-->
+<!--                    <td th:text="${product.smallCategory.name}">101</td>-->
+<!--                    <td th:text="${product.manufacturer.name}">202</td>-->
+<!--                    <td th:text="${product.name}">商品名</td>-->
+<!--                    <td th:text="${product.costPrice}">1000</td>-->
+<!--                    <td th:text="${product.manufacturerSuggestedRetailPrice}">1500</td>-->
+<!--                    <td th:text="${product.createdAt}">2023-01-01</td>-->
+<!--                    <td>-->
+<!--                        <a th:href="@{/product/details/{id}(id=${product.id})}" class="btn btn-secondary">詳細</a>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+        </table>
+		<nav aria-label="Page navigation">
+		    <ul class="pagination" id="pagination">
+		        <!-- ページネーションリンクがここに生成されます -->
+		    </ul>
+		</nav>
+		<div class="d-flex justify-content-center">
+	        <a href="/home" class="btn btn-secondary col-md-6 mb-5">TOPページへ戻る</a>
+		</div>
+    </div>
+
+    <!-- BootstrapのJavaScript (オプション) -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+<script>	
+	$(document).ready(function() {
+		
+		const itemsPerPage = 5;  // 1ページあたりの商品数
+		const initialPage = 1;   // 初期のページを設定
+		let currentPage = initialPage;  // ページが未定義の場合に備えて初期化
+		//let adjustedPage = page - 1;
+		let productList = {}; // 商品リストのオブジェクト（ページング対応）
+	    let productsContent = []; // productList.contentの配列を保持する
+		//let productList = []; // 全商品のリスト
+		
+	    // 初回ロード時に商品リストを取得
+	    loadProducts(currentPage);
+	
+	    function loadProducts(page) {
+			//const itemsPerPage = 5;  // 1ページあたりの商品数
+			const adjustedPage = page - 1;  // サーバー側は0ベース
+	        $.ajax({
+	            url: `/product/api/list/page?page=${adjustedPage}&size=${itemsPerPage}`,  // サーバーから商品リストを取得
+	            type: 'GET',
+	            success: function(response) {
+					console.log(response); // データの形式を確認
+	                productList = response;  // サーバーからの商品リストを保持
+	                renderProducts();  // 初回は1ページ目を表示
+	                renderPagination();  // ページネーションのリンクを作成
+					currentPage = page;  // 現在のページを更新
+	            },
+	            error: function() {
+	                alert('商品リストの取得に失敗しました');
+	            }
+	        });
+	    }
+	
+	    // 商品リストの表示
+	    function renderProducts() {
+			console.log('renderProductsのproductList:', productList);
+			const tbody = $('#product-list');
+			tbody.empty();
+			
+//	        currentPage = page;
+//	        const start = (page - 1) * itemsPerPage;
+//	        const end = start + itemsPerPage;
+//			console.log(productsContent);
+//			console.log(typeof productsContent);
+	        
+			// 現在のページと総ページ数の確認
+        	//const totalPages = productList.totalPages;
+
+			// productList.contentが配列か確認
+	        if (productList && Array.isArray(productList.content)) {
+				productsContent = productList.content; // content配列をproductsContentに保存
+				
+		        const start = (currentPage - 1) * itemsPerPage;
+		        const end = start + itemsPerPage;
+				const displayProducts = productsContent.slice(0, itemsPerPage); // 指定されたページの商品だけ表示
+	
+//	            const tbody = $('#product-list');
+//	            tbody.empty();
+	
+		        if (displayProducts.length > 0) {
+					displayProducts.forEach(product => {
+		                const row = `
+		                    <tr>
+								<td>${product.id}</td>
+								<td>${product.smallCategory.name}</td>
+								<td>${product.manufacturer.name}</td>
+								<td>${product.name}</td>
+								<td>${product.costPrice}</td>
+								<td>${product.manufacturerSuggestedRetailPrice}</td>
+								<td>${product.createdAt}</td>
+								<td><a href="/product/details/${product.id}" class="btn btn-secondary">詳細</a></td>
+		                    </tr>
+		                `;
+		                tbody.append(row);
+		            });
+		        } else {
+		            tbody.append('<tr><td colspan="7" class="text-center">商品がありません。</td></tr>');
+		        }
+			}
+	    }
+	
+	    // ページネーションのリンクを生成
+	    function renderPagination() {
+			const pagination = $('#pagination');
+	        pagination.empty(); // 既存の内容をクリア
+
+			//const tbody = $('#product-list');
+			//tbody.empty();
+			
+			console.log('renderPaginationのproductList:', productList);
+			const totalPages = productList.totalPages; // totalPagesをproductListから取得
+	        //const totalPages = Math.ceil(productList.length / itemsPerPage);
+	        //const pagination = $('#pagination');
+	        //pagination.empty();
+	
+			console.log('Total Pages:', totalPages); // デバッグ用に追加
+			
+	        for (let i = 1; i <= totalPages; i++) {
+	            const pageItem = `
+	                <li class="page-item ${i === currentPage  ? 'active' : ''}">
+	                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+	                </li>
+	            `;
+	            pagination.append(pageItem);
+	        }
+			// ページリンククリック時の動作
+			$(document).on('click', '.page-link', function(e) {
+			    e.preventDefault();
+				const newPage = parseInt($(this).data('page'));
+			    //page = $(this).data('page');
+
+			    loadProducts(newPage);
+			});
+	    }
+	});
+
+    // 検索フォームの送信処理を非同期で実行
+    $(document).ready(function () {
+        $('#searchForm').on('submit', function (event) {
+            event.preventDefault();  // ページリロードを防ぐ
+
+            let formData = $(this).serialize();  // フォームデータをシリアライズ
+			
+			// 大カテゴリの値を取得（未選択の場合は空の文字列）
+			    const largeCategoryId = $('#largeCategoryId').val();
+				const middleCategoryId = $('#middleCategoryId').val();
+				const smallCategoryId = $('#smallCategoryId').val();
+
+			// 大カテゴリと中カテゴリが選択されていれば、シリアライズしたデータに追加
+			if (largeCategoryId) {
+			    formData += `&largeCategoryId=${largeCategoryId}`;
+			}
+			if (middleCategoryId) {
+			    formData += `&middleCategoryId=${middleCategoryId}`;
+			}
+			if (smallCategoryId) {
+			    formData += `&smallCategoryId=${smallCategoryId}`;
+			}
+				
+            $.ajax({
+                url: '/product/api/list',  // フォームのaction先
+                type: 'GET',
+                data: formData,  // シリアライズしたフォームデータを送信
+                success: function (response) {
+					console.log("レスポンスのデータを確認：" + response); // ここでレスポンスのデータを確認
+				    response.forEach(function(item) {
+				        console.log("各アイテムの内容：" + 	JSON.stringify(item));  // 各アイテムの内容を表示
+				    });
+                    // 検索結果をページ内に表示
+                    const tbody = $('tbody');
+                    tbody.empty();  // テーブルの既存行をクリア
+
+                    if (response.length > 0) {
+                        // 結果がある場合、テーブルに行を追加
+                        response.forEach(product => {
+                            const row = `
+                                <tr>
+                                    <td>${product.id}</td>
+                                    <td>${product.smallCategory.name}</td>
+                                    <td>${product.manufacturer.name}</td>
+                                    <td>${product.name}</td>
+                                    <td>${product.costPrice}</td>
+                                    <td>${product.manufacturerSuggestedRetailPrice}</td>
+                                    <td>${product.createdAt}</td>
+                                    <td><a href="/product/details/${product.id}" class="btn btn-secondary">詳細</a></td>
+                                </tr>
+                            `;
+                            tbody.append(row);  // 新しい行をテーブルに追加
+                        });
+                    } else {
+                        // 検索結果がない場合のメッセージ
+                        tbody.append('<tr><td colspan="8" class="text-center">検索結果が見つかりませんでした。</td></tr>');
+                    }
+                },
+                error: function () {
+                    // エラーハンドリング
+                    alert('検索に失敗しました。');
+                }
+            });
+        });
+
+	    // 大カテゴリ変更時に、中カテゴリのリストを更新する
+	    $('#largeCategoryId').on('change', function () {
+	        const largeCategoryId = $(this).val(); // 大カテゴリのIDを取得
+	        console.log("大カテゴリのID: " + largeCategoryId); // 正しいIDが取得できているか確認するためのログ
+	
+			const middleSelect = $('#middleCategoryId');
+			const smallSelect = $('#smallCategoryId');
+			
+			middleSelect.empty().append('<option value="">選択してください</option>');
+			smallSelect.empty().append('<option value="">選択してください</option>'); // 小カテゴリもリセット
+
+	        if (largeCategoryId) {
+	            $.ajax({
+	                url: `/product/categories/middle`,
+	                method: 'GET',
+	                data: { largeCategoryId: largeCategoryId },
+	                success: function (data) {
+                        console.log('中カテゴリのデータ:', data); // 受け取ったデータを確認
+	                    data.forEach(category => {
+	                        middleSelect.append(`<option value="${category.id}">${category.name}</option>`);
+	                    });
+						
+						// 中カテゴリが選択されていない場合、大カテゴリに紐づく小カテゴリを取得
+						loadSmallCategories(largeCategoryId);
+						
+						// 中カテゴリを選択した際に、小カテゴリもリセット
+						//smallSelect.empty().append('<option value="">選択してください</option>');
+					},
+	                error: function (xhr, status, error) {
+	                    console.error('中カテゴリのロードに失敗しました: ', error);
+	                }
+	            });
+	        } else {
+				// 大カテゴリが選択されていない場合はすべての中カテゴリと小カテゴリを表示
+				//loadAllCategories();
+//	            $('#middleCategoryId').empty().append('<option value="">選択してください</option>');
+//	            $('#smallCategoryId').empty().append('<option value="">選択してください</option>');
+	        }
+	    });
+	
+	    // 中カテゴリ変更時に、小カテゴリのリストを更新する
+	    $('#middleCategoryId').on('change', function () {
+	        const middleCategoryId = $(this).val(); // 中カテゴリのIDを取得
+			const largeCategoryId = $('#largeCategoryId').val();
+	        console.log("中カテゴリのID: " + middleCategoryId); // 正しいIDが取得できているか確認するためのログ
+	
+			const smallSelect = $('#smallCategoryId');
+			    smallSelect.empty().append('<option value="">選択してください</option>');
+
+	        if (middleCategoryId) {
+	            $.ajax({
+	                url: `/product/categories/small`,
+	                method: 'GET',
+	                data: { middleCategoryId: middleCategoryId },
+	                success: function (data) {
+	                    //const smallSelect = $('#smallCategoryId');
+	                    //smallSelect.empty().append('<option value="">選択してください</option>');
+	                    data.forEach(category => {
+	                        smallSelect.append(`<option value="${category.id}">${category.name}</option>`);
+	                    });
+	                },
+	                error: function (xhr, status, error) {
+	                    console.error('小カテゴリのロードに失敗しました: ', error);
+	                }
+	            });
+	        } else {
+				// 中カテゴリが選択されていない場合は小カテゴリを大カテゴリに紐づくものを取得
+				loadSmallCategories($('#largeCategoryId').val());
+	        }
+	    });
+		
+		// すべての中カテゴリと小カテゴリをロードする関数
+		    function loadAllCategories() {
+		        // すべての中カテゴリを取得
+		        $.ajax({
+		            url: `/product/categories/middle`,
+		            method: 'GET',
+		            success: function (middleData) {
+		                const middleSelect = $('#middleCategoryId');
+		                middleSelect.empty().append('<option value="">選択してください</option>');
+		                middleData.forEach(category => {
+		                    middleSelect.append(`<option value="${category.id}">${category.name}</option>`);
+		                });
+		            },
+		            error: function (xhr, status, error) {
+		                console.error('中カテゴリのロードに失敗しました: ', error);
+		            }
+		        });
+		
+		        // すべての小カテゴリを取得
+		        $.ajax({
+		            url: `/product/categories/small`,
+		            method: 'GET',
+		            success: function (smallData) {
+		                const smallSelect = $('#smallCategoryId');
+		                smallSelect.empty().append('<option value="">選択してください</option>');
+		                smallData.forEach(category => {
+		                    smallSelect.append(`<option value="${category.id}">${category.name}</option>`);
+		                });
+		            },
+		            error: function (xhr, status, error) {
+		                console.error('小カテゴリのロードに失敗しました: ', error);
+		            }
+		        });
+		    }
+			
+			// 大カテゴリに紐づく小カテゴリを取得する関数
+			function loadSmallCategories(largeCategoryId) {
+			    const smallSelect = $('#smallCategoryId');
+			
+			    if (largeCategoryId) {
+			        $.ajax({
+			            url: `/product/categories/small`,
+			            method: 'GET',
+			            data: { largeCategoryId: largeCategoryId }, // 大カテゴリのIDを使って小カテゴリを取得
+			            success: function (data) {
+			                smallSelect.empty().append('<option value="">選択してください</option>');
+			                data.forEach(category => {
+			                    smallSelect.append(`<option value="${category.id}">${category.name}</option>`);
+			                });
+			            },
+			            error: function (xhr, status, error) {
+			                console.error('小カテゴリのロードに失敗しました: ', error);
+			            }
+			        });
+			    }
+			}
+		});
+
+		// リセットボタンでフォームをクリアし、元のリストに戻す
+        $('#resetButton').on('click', function () {
+            $('#searchForm')[0].reset(); // フォームをクリア
+            $.ajax({
+                url: '/product/list',
+                type: 'GET',
+                success: function (response) {
+                    const tbody = $('tbody');
+                    tbody.empty();  // テーブルの既存行をクリア
+					console.log(response)
+                    response.forEach(product => {
+                        const row = `
+                            <tr>
+                                <td>${product.id}</td>
+                                <td>${product.smallCategory.name}</td>
+                                <td>${product.manufacturer.name}</td>
+                                <td>${product.name}</td>
+                                <td>${product.costPrice}</td>
+                                <td>${product.manufacturerSuggestedRetailPrice}</td>
+                                <td>${product.createdAt}</td>
+                                <td><a href="/product/details/${product.id}" class="btn btn-secondary">詳細</a></td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                },
+                error: function () {
+                    alert('リストの取得に失敗しました。');
+                }
+            });
+			// ページ読み込み時にすべてのカテゴリをロード
+			loadAllCategories();
+			//loadProducts(newPage);
+        });
+</script>>

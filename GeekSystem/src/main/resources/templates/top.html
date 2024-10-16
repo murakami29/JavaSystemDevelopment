@@ -8,14 +8,18 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">管理者TOP画面</h1>
-
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
+		<h1 class="mb-4">管理者TOP画面</h1>
         <div class="d-grid gap-3">
             <a href="/admin/profile/details" class="btn btn-secondary btn-block">管理者プロフィール</a>
             <a href="/store/details" class="btn btn-secondary btn-block">店舗管理</a>
             <a href="/admin/list" class="btn btn-secondary btn-block">管理者管理</a>
-            <a href="/product" class="btn btn-secondary btn-block">商品管理</a>
-            <a href="/order-history" class="btn btn-secondary btn-block">商品発注履歴管理</a>
+            <a href="/product/list" class="btn btn-secondary btn-block">商品管理</a>
+            <a href="/product/order/history" class="btn btn-secondary btn-block">商品発注履歴管理</a>
             <a href="/manufacturer" class="btn btn-secondary btn-block">メーカ管理</a>
             <a href="/category" class="btn btn-secondary btn-block">カテゴリ管理</a>
         </div>

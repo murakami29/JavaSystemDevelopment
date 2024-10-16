@@ -27,6 +27,11 @@
 </head>
 <body>
     <div class="container mt-4">
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
         <h1>店舗管理編集完了</h1>
         <p>店舗情報の編集が完了しました。</p>
         <div class="row btn-row">

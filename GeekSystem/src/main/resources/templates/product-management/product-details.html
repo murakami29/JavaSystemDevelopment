@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>商品詳細</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-row {
+            margin-top: 20px;
+        }
+        .btn-row .btn {
+            width: 100%;
+        }
+        .btn-spacing {
+            margin-bottom: 10px; /* ボタンの間のスペースを作る */
+        }
+        .pagination {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+		<!-- エラーメッセージがある場合に表示 -->
+		<div th:if="${errorMessage}" class="alert alert-danger">
+		    <p th:text="${errorMessage}"></p>
+		</div>
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
+        <h1>商品詳細</h1>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th scope="row">商品ID</th>
+                    <td th:text="${product.id}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">大カテゴリ</th>
+                    <td th:text="${product.smallCategory.middleCategory.largeCategory.name}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">小カテゴリ</th>
+                    <td th:text="${product.smallCategory.name}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">メーカー</th>
+                    <td th:text="${product.manufacturer.name}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">商品名</th>
+                    <td th:text="${product.name}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">商品説明</th>
+                    <td th:text="${product.details}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">商品画像</th>
+					<td>
+					    <img th:src="@{${product.productImage}}" alt="Product Image" />
+					</td>
+                </tr>
+                <tr>
+                    <th scope="row">仕入れ原価</th>
+                    <td th:text="${product.costPrice}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">メーカ希望小売価格</th>
+                    <td th:text="${product.manufacturerSuggestedRetailPrice}"></td>
+                </tr>
+                <tr>
+					<th scope="row">
+						<span th:text="${storeName} + ':商品在庫数'"></span>
+					</th>
+					<td>
+				        <span th:if="${product.storeProductInventories.size() > 0}">
+				            <!-- 在庫が存在する場合に表示 -->
+				            <span th:text="${product.storeProductInventories[0].productInventory != null ? product.storeProductInventories[0].productInventory : '在庫情報がありません'}"></span>
+				        </span>
+				        <span th:if="${product.storeProductInventories.size() == 0}">
+				            <!-- 在庫情報が存在しない場合のメッセージ -->
+				            在庫情報がありません
+				        </span>
+				    </td>
+				<tr>
+					<th scope="row">
+						<span th:text="${storeName} + ':最終発注日時'"></span>
+					</th>
+					<td>
+				        <span th:if="${orderHistory != null}">
+				            <span th:if="${orderHistory.orderDate != null}">
+				                <!-- 発注日時が存在する場合にフォーマットして表示 -->
+				                <span th:text="${orderHistory.orderDate}"></span>
+				            </span>
+				            <span th:if="${orderHistory.orderDate == null}">
+				                <!-- 発注日時が存在しない場合のメッセージ -->
+				                発注履歴がありません
+				            </span>
+				        </span>
+				        <span th:if="${orderHistory == null}">
+				            <!-- 発注履歴自体が存在しない場合のメッセージ -->
+				            発注履歴がありません
+				        </span>
+				    </td>
+				</tr>
+				<tr>
+				    <th scope="row">作成日時</th>
+				    <td th:text="${product.createdAt}"></td>
+				</tr>
+				<tr>
+				    <th scope="row">更新日時</th>
+					<td>
+				        <span th:if="${product.updatedAt != null}">
+				            <!-- 日時が存在する場合に表示 -->
+							<span th:text="${product.updatedAt}"></span>
+				        </span>
+				        <span th:if="${product.updatedAt == null}">
+				            <!-- 日時が存在しない場合のメッセージ -->
+				            ー
+				        </span>
+					</td>
+				</tr>
+            </tbody>
+        </table>
+        <div class="row btn-row">
+			<div class="col-md-6 btn-spacing">
+			    <a th:href="@{/product/order/{id}(id=${product.id})}" class="btn btn-primary">発注</a>
+			</div>
+			<div class="col-md-6">
+				<a href="/product/list" class="btn btn-secondary">商品管理一覧へ戻る</a>
+			</div>
+        </div>
+    </div>
+
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -28,6 +29,7 @@ public class OrderHistory {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @ToString.Exclude // 循環参照を防ぐ
     private Product product;
 
     @ManyToOne
@@ -43,7 +45,17 @@ public class OrderHistory {
 
     @Column(name = "total_amount", nullable = false)
     private BigDecimal totalAmount;
+    
+    @Column(name = "inventory_at_order_time", nullable = false)
+    private int inventoryAtOrderTime; // 発注時の在庫数を保持するフィールド
 
+    @Column(name = "cost_price_at_order_time", nullable = false)
+    private BigDecimal costPriceAtOrderTime; // 発注時の仕入れ原価を保持するフィールド
+
+    @UpdateTimestamp
+    @Column(name = "order_date", nullable = false)
+    private LocalDateTime orderDate; // 更新タイムスタンプ
+    
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt; // 作成タイムスタンプ
@@ -52,4 +64,30 @@ public class OrderHistory {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt; // 更新タイムスタンプ
     
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "store_id", referencedColumnName = "store_id", insertable = false, updatable = false)
+    private StoreProductPrice storeProductPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "store_id", referencedColumnName = "store_id", insertable = false, updatable = false)
+    private StoreProductInventory storeProductInventory;
+    
+    @Override
+    public String toString() {
+        return "OrderHistory{id=" + id + ", totalAmount=" + totalAmount + ", createdAt=" + createdAt + "}"; // 必要なプロパティだけ返す
+    }
+    
+ // 合計金額のgetterとsetter
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    // 他の必要なgetterとsetterメソッド
+
 }

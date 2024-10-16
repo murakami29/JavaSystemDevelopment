@@ -35,5 +35,5 @@ public class StoreProductPriceId implements Serializable {
 	public int hashCode() {
 		return Objects.hash(productId, storeId);
 	}
-	
+
 }
