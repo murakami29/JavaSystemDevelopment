@@ -75,43 +75,6 @@ public class AdminProfileController {
 
         return "admin-profile-edit";
     }
-
-//    @GetMapping("/admin/profile/edit/{id}")
-//    public String showEditForm(@PathVariable("id") Long id, Model model) {
-//    	Logger logger = LoggerFactory.getLogger(AdminProfileController.class);
-//    	Optional<User> userOptional = userService.findById(id);
-//
-//        // ユーザーが存在しない場合のエラーハンドリング
-//        if (userOptional.isEmpty()) {
-//            // エラーメッセージをモデルに追加してエラーページにリダイレクト
-//            model.addAttribute("errorMessage", "ユーザーが見つかりませんでした");
-//            return "error-page"; // ここでエラーページを返す
-//        }
-//
-//        User user = userOptional.get();
-//        
-//        // ログにユーザーデータを出力して確認
-//        logger.info("編集画面のために取得したユーザー情報: " + user.toString());
-//
-//        // フォームに既存データをセット
-//        AdminProfileForm form = new AdminProfileForm();
-//        form.setId(user.getId());
-//        form.setStoreId(user.getStore().getId());
-//        form.setRoleId(user.getRole().getId());
-//        form.setPermissionId(user.getPermission().getId());
-//        form.setFirstName(user.getFirstName());
-//        form.setLastName(user.getLastName());
-//        form.setEmail(user.getEmail());
-//        form.setPhone(user.getPhone());
-//
-//        // 店舗、役職、権限のリストをModelに追加
-//        model.addAttribute("adminProfileForm", form);
-//        model.addAttribute("stores", storeService.findAll()); // 店舗リスト
-//        model.addAttribute("roles", roleService.findAll()); // 役職リスト
-//        model.addAttribute("permissions", permissionService.findAll()); // 権限リスト
-//
-//        return "admin-profile-edit"; // 正常時の編集画面のHTMLを返す
-//    }
     
     // 管理者プロフィール編集内容を保存
     @PostMapping("/admin/profile/edit")

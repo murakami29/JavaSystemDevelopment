@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>管理者作成</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
+	<head>
+	    <meta charset="UTF-8">
+	    <title>管理者作成</title>
+	    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+		<style>
+		    .btn-row {
+		        margin-top: 20px;
+		    }
+			.btn-row .btn {
+			    width: 100%;
+			}
+			.btn-spacing {
+			    margin-bottom: 10px; /* ボタンの間のスペースを作る */
+			}
+		</style>
+		</head>
 <body>
     <div class="container mt-4">
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
         <h1>管理者作成</h1>
         <form th:action="@{/admin/create}" th:object="${adminCreateForm}" method="post">
 			<!-- 店舗選択 -->
@@ -53,7 +69,15 @@
                 <label for="password">パスワード</label>
                 <input type="password" id="password" th:field="*{password}" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">作成</button>
+			<div class="row btn-row">
+				<div class="col-md-6 btn-spacing">
+				    <button type="submit" class="btn btn-primary">作成</button>
+				</div>
+				<div class="col-md-6">
+					<a href="/admin/list" class="btn btn-secondary">管理者一覧に戻る</a>
+				</div>
+			</div>
+<!--            <button type="submit" class="btn btn-primary">作成</button>-->
         </form>
     </div>
 

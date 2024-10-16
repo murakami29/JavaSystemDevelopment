@@ -6,6 +6,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,5 +43,14 @@ public class Store {
     
     // Userエンティティとのリレーションを設定
     @OneToMany(mappedBy = "store")
+    @JsonIgnore // 無限ループを防ぐために追加
     private List<User> users;
+    
+    @Override
+    public String toString() {
+        return "Store{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

@@ -58,4 +58,30 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt; // 更新タイムスタンプ
+    
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                '}';
+    }
+    
+    // ゲッターとセッター
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+    
+    public String getStoreName() {
+        if (store != null) {
+            return store.getName();
+        } else {
+            return null; // または空文字など、適切なデフォルト値
+        }
+    }
+
 }

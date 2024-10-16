@@ -18,6 +18,11 @@
 </head>
 <body>
     <div class="container mt-4">
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
 		<!-- エラーメッセージがある場合に表示 -->
 		<div th:if="${errorMessage}" class="alert alert-danger">
 		    <p th:text="${errorMessage}"></p>

@@ -22,7 +22,11 @@
 		<div th:if="${errorMessage}" class="alert alert-danger">
 		    <p th:text="${errorMessage}"></p>
 		</div>
-		
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
         <h1>管理者詳細</h1>
         <table class="table table-bordered">
 				<tbody>

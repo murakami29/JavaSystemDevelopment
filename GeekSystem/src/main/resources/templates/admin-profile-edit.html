@@ -18,6 +18,11 @@
 	</head>
 <body>
     <div class="container mt-4">
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
         <h1>管理者プロフィール編集</h1>
         <form th:action="@{/admin/profile/edit}" method="post">
 			<input type="hidden" name="id" th:value="${adminProfile.id}"> <!--隠しフィールド-->
@@ -60,7 +65,6 @@
                 <label for="phone">電話番号</label>
                 <input type="text" class="form-control" id="phone" name="phone" th:value="${adminProfile.phone}">
 			</div>
-
 			<div class="row btn-row">
 				<div class="col-md-6 btn-spacing">
 				    <button type="submit" class="btn btn-primary">更新する</button>
