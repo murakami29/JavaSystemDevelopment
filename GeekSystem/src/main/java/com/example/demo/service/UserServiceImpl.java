@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public void save(com.example.demo.entity.User user) {
-    	
         userRepository.save(user);
     }
     

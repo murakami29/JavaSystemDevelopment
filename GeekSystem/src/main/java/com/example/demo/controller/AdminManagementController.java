@@ -131,7 +131,7 @@ public class AdminManagementController {
         if (userOptional.isEmpty()) {
             // ユーザーが見つからない場合のエラーハンドリング
             model.addAttribute("errorMessage", "ユーザーが見つかりませんでした");
-            return "admin-edit";
+            return "admin-management/admin-edit";
         }
 
         User admin = userOptional.get();
@@ -159,6 +159,7 @@ public class AdminManagementController {
         return "admin-management/admin-edit-complete";
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/create")
     public String showCreateForm(Model model) {
         model.addAttribute("adminCreateForm", new AdminCreateForm());
