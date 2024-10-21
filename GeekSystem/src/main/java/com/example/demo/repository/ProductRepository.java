@@ -38,5 +38,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                              @Param("smallCategoryId") Long smallCategoryId,
                                              @Param("keyword") String keyword);
     
+    List<Product> findBySmallCategoryId(Long smallId);
 
 }

@@ -28,14 +28,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageable);
     }
     
-//    @Override
-//    public Page<Product> searchProductsByKeyword(String keyword, Pageable pageable) {
-//        if (keyword == null || keyword.isEmpty()) {
-//            return productRepository.findAll(pageable);
-//        } else {
-//            return productRepository.findByNameContaining(keyword, pageable);
-//        }
-//    }
+    @Override
+    public List<Product> getProductsBySmallCategoryId(Long smallId) {
+        return productRepository.findBySmallCategoryId(smallId);
+    }
     
     @Override
     public List<Product> searchProductsByKeyword(String keyword) {

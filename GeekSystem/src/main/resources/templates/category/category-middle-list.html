@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>中カテゴリ一覧</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .btn-row {
+	        margin-top: 20px;
+	    }
+		.btn-row .btn {
+		    width: 100%;
+		}
+		.btn-spacing {
+		    margin-bottom: 10px; /* ボタンの間のスペースを作る */
+		}
+	</style>
+</head>
+<body>
+    <div class="container mt-4">
+		<!-- エラーメッセージがある場合に表示 -->
+		<div th:if="${errorMessage}" class="alert alert-danger">
+		    <p th:text="${errorMessage}"></p>
+		</div>
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
+		<!-- カテゴリ名を動的に表示 -->
+		<h1 th:text="${largeCategory.name} + '＞中カテゴリ一覧'"></h1>
+				
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>中カテゴリID</th>
+                    <th>中カテゴリ名</th>
+                    <th>作成日時</th>
+                    <th>更新日時</th>
+                    <th>詳細</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 管理者リストを繰り返し表示 -->
+                <tr th:each="middleCategory : ${middleCategories}">
+                    <td th:text="${middleCategory.id}">1</td>
+                    <td th:text="${middleCategory.name}">1001</td>
+                    <td th:text="${middleCategory.createdAt}">3</td>
+                    <td th:text="${middleCategory.updatedAt}">1</td>
+                    <td>
+                        <!-- 詳細ボタン -->
+						<a th:href="@{/category/list/large/{largeId}/middle/{middleId}/small(largeId=${largeId}, middleId=${middleCategory.id})}" class="btn btn-secondary">詳細</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+		<div class="row btn-row">
+			<div class="col-md-6">
+				<a href="/category/list/large" class="btn btn-secondary">大カテゴリ一覧へ戻る</a>
+			</div>
+			<div class="col-md-6">
+				<a href="/home" class="btn btn-secondary">TOPページへ戻る</a>
+			</div>
+
+		</div>
+    </div>
+
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

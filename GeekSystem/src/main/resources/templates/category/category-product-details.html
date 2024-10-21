@@ -127,10 +127,10 @@
         </table>
         <div class="row btn-row">
 			<div class="col-md-6 btn-spacing">
-			    <a th:href="@{/product/order/{id}(id=${product.id})}" class="btn btn-primary">発注</a>
+				<a th:href="@{/category/list/large/{largeId}/middle/{middleId}/small/{smallId}(largeId=${largeId}, middleId=${middleId}, smallId=${smallId})}" class="btn btn-secondary">小カテゴリ詳細へ戻る</a>
 			</div>
 			<div class="col-md-6">
-				<a th:href="@{/product/list}" class="btn btn-secondary">商品管理一覧へ戻る</a>
+				<a href="/home" class="btn btn-secondary">TOPページへ戻る</a>
 			</div>
         </div>
     </div>
