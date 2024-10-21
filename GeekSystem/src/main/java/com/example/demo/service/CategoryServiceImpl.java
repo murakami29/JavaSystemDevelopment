@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -71,5 +72,20 @@ public class CategoryServiceImpl implements CategoryService {
             return smallCategory.getMiddleCategory().getLargeCategory();
         }
         return null; // MiddleCategoryが存在しない場合
+    }
+    
+    @Override
+    public Optional<LargeCategory> findLargeCategoryById(Long largeId) {
+        return largeCategoryRepository.findById(largeId);	
+    }
+    
+    @Override
+    public Optional<MiddleCategory> findMiddleCategoryById(Long middleId) {
+        return middleCategoryRepository.findById(middleId);
+    }
+    
+    @Override
+    public Optional<SmallCategory> findSmallCategoryById(Long smallId) {
+        return smallCategoryRepository.findById(smallId);
     }
 }

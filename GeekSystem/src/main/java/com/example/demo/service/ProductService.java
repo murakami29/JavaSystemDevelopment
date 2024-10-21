@@ -15,6 +15,7 @@ public interface ProductService {
 	List<Product> searchProducts (Long largeCategoryId, Long middleCategoryId, Long smallCategoryId, String keyword);
 	Optional<Product> findById(Long id);
 	Page<Product> findAll(Pageable pageable);
+	List<Product> getProductsBySmallCategoryId(Long smallId);
 //	Page<Product> searchProductsByKeyword(String keyword, Pageable pageable);
 
 
