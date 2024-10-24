@@ -21,8 +21,6 @@ import com.example.demo.entity.StoreProductInventory;
 import com.example.demo.entity.StoreProductPrice;
 import com.example.demo.entity.User;
 import com.example.demo.form.ProductOrderForm;
-import com.example.demo.repository.SmallCategoryRepository;
-import com.example.demo.service.CategoryService;
 import com.example.demo.service.CustomUserDetails;
 import com.example.demo.service.OrderHistoryService;
 import com.example.demo.service.ProductService;
@@ -41,9 +39,6 @@ public class OrderHistoryController {
 	private ProductService productService;
 
 	@Autowired
-	private CategoryService categoryService;
-
-	@Autowired
 	private OrderHistoryService orderHistoryService;
 
 	@Autowired
@@ -51,9 +46,6 @@ public class OrderHistoryController {
 
 	@Autowired
 	private StoreProductPriceService storeProductPriceService;
-
-	@Autowired
-	private SmallCategoryRepository smallCategoryRepository; // SmallCategoryのリポジトリ
 
 	@Autowired
 	private StoreProductInventoryService storeProductInventoryService; // 新たに追加

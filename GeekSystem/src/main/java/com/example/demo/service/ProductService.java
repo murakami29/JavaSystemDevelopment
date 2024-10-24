@@ -18,8 +18,4 @@ public interface ProductService {
 	Page<Product> findAll(Pageable pageable);
 	List<Product> getProductsBySmallCategoryId(Long smallId);
 	List<ProductCategoryResponse> getProductCategories();
-//	ProductCategoryResponse getProductDetails(Long id);
-//	Page<Product> searchProductsByKeyword(String keyword, Pageable pageable);
-
-
 }

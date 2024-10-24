@@ -62,20 +62,4 @@ public class ProductServiceImpl implements ProductService {
         // リポジトリからカテゴリ情報を取得するロジックを追加します
         return productRepository.findAllProductCategories(); // 仮メソッド名、実際には実装する必要があります
     }
-    
-//    @Override
-//    public ProductCategoryResponse getProductDetails(Long id) {
-//        // 商品の詳細を取得するロジック
-//        Product product = productRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Product not found"));
-//        
-//        // 必要に応じてProductCategoryResponseにマッピング
-//        ProductCategoryResponse response = new ProductCategoryResponse();
-//        response.setProductId(product.getId());
-//        response.setProductName(product.getName());
-//        response.setCategoryName(product.getCategory().getName());
-//        // その他の必要な情報を設定
-//
-//        return response;
-//    }
 }

@@ -38,13 +38,4 @@ public class StoreOrderResponse {
         private int orderHistoryQuantity;
         private BigDecimal orderHistoryTotalAmount;
     }
-//	// 商品一覧
-//	private String productName;
-//	private BigDecimal storeProductPricePrice;
-//	private int storeProductInventoryProductInventory;
-//	// 商品発注履歴一覧
-//	private String orderHistoryProduct;
-//	private User orderHistoryUser;
-//	private int orderHistoryQuantity;
-//	private BigDecimal orderHistoryTotalAmount;
 }

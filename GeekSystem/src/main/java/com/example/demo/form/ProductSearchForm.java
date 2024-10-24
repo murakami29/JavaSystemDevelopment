@@ -8,5 +8,4 @@ public class ProductSearchForm {
     private Long middleCategoryId;
     private Long smallCategoryId;
     private String searchText;
-    // 他のフィールドも追加
 }

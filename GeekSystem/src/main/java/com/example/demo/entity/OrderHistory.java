@@ -79,15 +79,4 @@ public class OrderHistory {
         return "OrderHistory{id=" + id + ", totalAmount=" + totalAmount + ", createdAt=" + createdAt + "}"; // 必要なプロパティだけ返す
     }
     
- // 合計金額のgetterとsetter
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    // 他の必要なgetterとsetterメソッド
-
 }
