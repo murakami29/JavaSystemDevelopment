@@ -28,12 +28,6 @@ public class StoreManagementController {
     
     @Autowired
     private StoreService storeService;
-
-//    @Autowired
-//    private RoleService roleService;
-//
-//    @Autowired
-//    private PermissionService permissionService;
     
     @GetMapping("/store/details")
     public String getStoreDetails(Model model, Authentication authentication) {

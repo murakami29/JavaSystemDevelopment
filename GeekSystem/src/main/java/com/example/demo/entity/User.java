@@ -67,15 +67,7 @@ public class User {
                 '}';
     }
     
-    // ゲッターとセッター
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-    
+    // カスタムメソッド: 店舗名を取得するためのゲッター
     public String getStoreName() {
         if (store != null) {
             return store.getName();

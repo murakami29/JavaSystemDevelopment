@@ -30,9 +30,6 @@ import com.example.demo.repository.SmallCategoryRepository;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.OrderHistoryService;
 import com.example.demo.service.ProductService;
-import com.example.demo.service.StoreProductInventoryService;
-import com.example.demo.service.StoreProductPriceService;
-import com.example.demo.service.StoreService;
 import com.example.demo.service.UserService;
 
 @Controller
@@ -51,16 +48,7 @@ public class ProductManagementController {
     private OrderHistoryService orderHistoryService;
     
     @Autowired
-    private StoreService storeService;
-    
-    @Autowired
-    private StoreProductPriceService storeProductPriceService;
-    
-    @Autowired
-    private SmallCategoryRepository smallCategoryRepository;  // SmallCategoryのリポジトリ
-
-    @Autowired
-    private StoreProductInventoryService storeProductInventoryService; // 新たに追加
+    private SmallCategoryRepository smallCategoryRepository;
     
     // エラーハンドリングのメソッド
     private String handleError(String errorMessage, Model model) {

@@ -45,10 +45,6 @@ public class SecurityConfig {
                     .deleteCookies("JSESSIONID")
                     .permitAll()
                 );
-            
-//            .logout(logout -> logout
-//                .permitAll()
-//            );
 
         return http.build();
     }

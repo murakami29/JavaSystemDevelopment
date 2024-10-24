@@ -78,14 +78,4 @@ public class Product {
     public String toString() {
         return "Product{id=" + id + ", name='" + name + "'}"; // 必要なプロパティだけ返す
     }
-
-    // ゲッターとセッター
-//    public List<StoreProductInventory> getStoreProductInventories() {
-//        return storeProductInventories;
-//    }
-//
-//    public void setStoreProductInventories(List<StoreProductInventory> storeProductInventories) {
-//        this.storeProductInventories = storeProductInventories;
-//    }
-    
 }

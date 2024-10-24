@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,38 +17,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.entity.Manufacturer;
 import com.example.demo.form.ManufacturerCreateForm;
 import com.example.demo.form.ManufacturerEditForm;
-import com.example.demo.service.AdminService;
 import com.example.demo.service.ManufacturerService;
-import com.example.demo.service.PermissionService;
-import com.example.demo.service.RoleService;
-import com.example.demo.service.StoreService;
-import com.example.demo.service.UserService;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class ManufacturerController {
-	@Autowired
-    private UserService userService;
-    
-    @Autowired
-    private StoreService storeService;
 
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private PermissionService permissionService;
-    
-    @Autowired
-    private AdminService adminService;
-    
-//    @Autowired
-//    private ManufacturerService manufacturerService;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder; // PasswordEncoderを注入
-    
     private final ManufacturerService manufacturerService;
 
     @Autowired

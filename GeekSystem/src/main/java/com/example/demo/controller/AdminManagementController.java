@@ -222,10 +222,5 @@ public class AdminManagementController {
         
         return "admin-management/admin-delete-complete";
     }
-//   
-//    @GetMapping("/admin/delete/complete")
-//    public String showAdminDeleteComplete() {
-//        return "admin-management/admin-delete-complete";  // 対応するテンプレート名を返す
-//    }
 
 }

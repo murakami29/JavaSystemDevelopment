@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +17,9 @@ import com.example.demo.entity.OrderHistory;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.SmallCategory;
 import com.example.demo.entity.User;
-import com.example.demo.service.AdminService;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.OrderHistoryService;
-import com.example.demo.service.PermissionService;
 import com.example.demo.service.ProductService;
-import com.example.demo.service.RoleService;
-import com.example.demo.service.StoreService;
 import com.example.demo.service.UserService;
 
 @Controller
@@ -33,24 +28,10 @@ public class CategoryController {
     private UserService userService;
     
     @Autowired
-    private StoreService storeService;
-
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private PermissionService permissionService;
-    
-    @Autowired
-    private AdminService adminService;
-    
-    @Autowired
     private ProductService productService;
     
     @Autowired
     private OrderHistoryService orderHistoryService;
-    @Autowired
-    private PasswordEncoder passwordEncoder; // PasswordEncoderを注入
     
     private final CategoryService categoryService;
 

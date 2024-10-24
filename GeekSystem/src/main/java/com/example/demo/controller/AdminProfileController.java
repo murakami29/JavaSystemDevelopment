@@ -53,7 +53,7 @@ public class AdminProfileController {
             model.addAttribute("errorMessage", "管理者情報が見つかりませんでした");
         }
 
-        return "admin-profile-details";
+        return "admin-profile/admin-profile-details";
     }
     
     @GetMapping("/admin/profile/edit/{id}")
@@ -73,7 +73,7 @@ public class AdminProfileController {
         model.addAttribute("roles", roleService.findAll());
         model.addAttribute("permissions", permissionService.findAll());
 
-        return "admin-profile-edit";
+        return "admin-profile/admin-profile-edit";
     }
     
     // 管理者プロフィール編集内容を保存
@@ -84,7 +84,7 @@ public class AdminProfileController {
         if (userOptional.isEmpty()) {
             // ユーザーが見つからない場合のエラーハンドリング
             model.addAttribute("errorMessage", "ユーザーが見つかりませんでした");
-            return "admin-profile-edit";
+            return "admin-profile/admin-profile-edit";
         }
 
         User user = userOptional.get();
@@ -106,7 +106,7 @@ public class AdminProfileController {
     
     @GetMapping("/admin/profile/complete")
     public String showCompletePage() {
-        return "admin-profile-complete"; // 完了ページのテンプレート名
+        return "admin-profile/admin-profile-complete"; // 完了ページのテンプレート名
     }
 
 }

@@ -84,27 +84,13 @@
                 </tr>
             </thead>
 			<tbody id="product-list">
-			    <!-- 商品リストがここに動的に追加されます -->
+			    <!-- 商品リストがここに動的に生成 -->
 			</tbody>
-			
-<!--            <tbody>-->
-<!--                <tr th:each="product : ${productList}">-->
-<!--                    <td th:text="${product.id}">1</td>-->
-<!--                    <td th:text="${product.smallCategory.name}">101</td>-->
-<!--                    <td th:text="${product.manufacturer.name}">202</td>-->
-<!--                    <td th:text="${product.name}">商品名</td>-->
-<!--                    <td th:text="${product.costPrice}">1000</td>-->
-<!--                    <td th:text="${product.manufacturerSuggestedRetailPrice}">1500</td>-->
-<!--                    <td th:text="${product.createdAt}">2023-01-01</td>-->
-<!--                    <td>-->
-<!--                        <a th:href="@{/product/details/{id}(id=${product.id})}" class="btn btn-secondary">詳細</a>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
         </table>
+		
 		<nav aria-label="Page navigation">
 		    <ul class="pagination" id="pagination">
-		        <!-- ページネーションリンクがここに生成されます -->
+		        <!-- ページネーションリンクがここに生成 -->
 		    </ul>
 		</nav>
 		<div class="d-flex justify-content-center">
@@ -124,16 +110,13 @@
 		const itemsPerPage = 5;  // 1ページあたりの商品数
 		const initialPage = 1;   // 初期のページを設定
 		let currentPage = initialPage;  // ページが未定義の場合に備えて初期化
-		//let adjustedPage = page - 1;
 		let productList = {}; // 商品リストのオブジェクト（ページング対応）
 	    let productsContent = []; // productList.contentの配列を保持する
-		//let productList = []; // 全商品のリスト
 		
 	    // 初回ロード時に商品リストを取得
 	    loadProducts(currentPage);
 	
 	    function loadProducts(page) {
-			//const itemsPerPage = 5;  // 1ページあたりの商品数
 			const adjustedPage = page - 1;  // サーバー側は0ベース
 	        $.ajax({
 	            url: `/product/api/list/page?page=${adjustedPage}&size=${itemsPerPage}`,  // サーバーから商品リストを取得
@@ -156,15 +139,6 @@
 			console.log('renderProductsのproductList:', productList);
 			const tbody = $('#product-list');
 			tbody.empty();
-			
-//	        currentPage = page;
-//	        const start = (page - 1) * itemsPerPage;
-//	        const end = start + itemsPerPage;
-//			console.log(productsContent);
-//			console.log(typeof productsContent);
-	        
-			// 現在のページと総ページ数の確認
-        	//const totalPages = productList.totalPages;
 
 			// productList.contentが配列か確認
 	        if (productList && Array.isArray(productList.content)) {
@@ -173,10 +147,7 @@
 		        const start = (currentPage - 1) * itemsPerPage;
 		        const end = start + itemsPerPage;
 				const displayProducts = productsContent.slice(0, itemsPerPage); // 指定されたページの商品だけ表示
-	
-//	            const tbody = $('#product-list');
-//	            tbody.empty();
-	
+		
 		        if (displayProducts.length > 0) {
 					displayProducts.forEach(product => {
 		                const row = `
@@ -203,15 +174,9 @@
 	    function renderPagination() {
 			const pagination = $('#pagination');
 	        pagination.empty(); // 既存の内容をクリア
-
-			//const tbody = $('#product-list');
-			//tbody.empty();
-			
+						
 			console.log('renderPaginationのproductList:', productList);
 			const totalPages = productList.totalPages; // totalPagesをproductListから取得
-	        //const totalPages = Math.ceil(productList.length / itemsPerPage);
-	        //const pagination = $('#pagination');
-	        //pagination.empty();
 	
 			console.log('Total Pages:', totalPages); // デバッグ用に追加
 			
@@ -227,7 +192,6 @@
 			$(document).on('click', '.page-link', function(e) {
 			    e.preventDefault();
 				const newPage = parseInt($(this).data('page'));
-			    //page = $(this).data('page');
 
 			    loadProducts(newPage);
 			});
@@ -324,8 +288,6 @@
 						// 中カテゴリが選択されていない場合、大カテゴリに紐づく小カテゴリを取得
 						loadSmallCategories(largeCategoryId);
 						
-						// 中カテゴリを選択した際に、小カテゴリもリセット
-						//smallSelect.empty().append('<option value="">選択してください</option>');
 					},
 	                error: function (xhr, status, error) {
 	                    console.error('中カテゴリのロードに失敗しました: ', error);
@@ -333,9 +295,9 @@
 	            });
 	        } else {
 				// 大カテゴリが選択されていない場合はすべての中カテゴリと小カテゴリを表示
-				//loadAllCategories();
-//	            $('#middleCategoryId').empty().append('<option value="">選択してください</option>');
-//	            $('#smallCategoryId').empty().append('<option value="">選択してください</option>');
+				loadAllCategories();
+	            $('#middleCategoryId').empty().append('<option value="">選択してください</option>');
+	            $('#smallCategoryId').empty().append('<option value="">選択してください</option>');
 	        }
 	    });
 	
@@ -460,6 +422,6 @@
             });
 			// ページ読み込み時にすべてのカテゴリをロード
 			loadAllCategories();
-			//loadProducts(newPage);
+//			loadProducts(newPage);
         });
 </script>

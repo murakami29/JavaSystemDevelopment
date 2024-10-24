@@ -20,9 +20,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // User をデータベースから検索
@@ -43,13 +40,6 @@ public class UserServiceImpl implements UserService {
         }
         
         System.out.println("Role Name: " + roleName); // 変換後のロール名をコンソールに出力
-        
-//        // UserDetails のインスタンスを返す
-//        return User.builder()
-//                .username(userEntity.getEmail())
-//                .password(userEntity.getPassword())
-//                .authorities(new SimpleGrantedAuthority(roleName)) // ユーザーのロールを設定
-//                .build();
         
         Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roleName));
 

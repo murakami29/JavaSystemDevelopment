@@ -57,7 +57,6 @@
                     <td th:text="${order.product.name}"></td>
                     <td th:text="${order.user.id}"></td>
                     <td th:text="${order.costPriceAtOrderTime != null ? order.costPriceAtOrderTime : 'N/A' + '円'}"></td>
-<!--                    <td th:text="${order.storeProductPrice.price} + '円'"></td>-->
                     <td th:text="${order.quantity}"></td>
                     <td th:text="${order.inventoryAtOrderTime != null ? order.inventoryAtOrderTime : 'N/A'}"></td>
                     <td th:text="${order.totalAmount} + '円'"></td>
