@@ -29,4 +29,11 @@ public class StoreServiceImpl implements StoreService {
     public void save(com.example.demo.entity.Store store) {
         storeRepository.save(store);
     }
+    
+    // 店舗の発注履歴情報を取得するメソッド
+//    @Override
+//    public List<ProductCategoryResponse> getStoreOrders() {
+//        // リポジトリからカテゴリ情報を取得するロジックを追加します
+//        return storeRepository.findAllStoreOrders(); // 仮メソッド名、実際には実装する必要があります
+//    }
 }

@@ -80,12 +80,12 @@ public class Product {
     }
 
     // ゲッターとセッター
-    public List<StoreProductInventory> getStoreProductInventories() {
-        return storeProductInventories;
-    }
-
-    public void setStoreProductInventories(List<StoreProductInventory> storeProductInventories) {
-        this.storeProductInventories = storeProductInventories;
-    }
+//    public List<StoreProductInventory> getStoreProductInventories() {
+//        return storeProductInventories;
+//    }
+//
+//    public void setStoreProductInventories(List<StoreProductInventory> storeProductInventories) {
+//        this.storeProductInventories = storeProductInventories;
+//    }
     
 }

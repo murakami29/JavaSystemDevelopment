@@ -9,4 +9,5 @@ public interface StoreService {
     List<Store> findAll();  // 全ての店舗を取得
     Optional<Store> findById(Long id);  // 店舗をIDで検索
     void save(Store store); // 店舗情報を保存
+//    List<ProductCategoryResponse> getStoreOrders();
 }

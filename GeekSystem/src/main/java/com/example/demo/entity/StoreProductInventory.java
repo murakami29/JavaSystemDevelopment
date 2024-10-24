@@ -43,5 +43,4 @@ public class StoreProductInventory {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt; // 更新タイムスタンプ
     
-    
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.demo.entity.Product;
+import com.example.demo.response.ProductCategoryResponse;
 
 
 public interface ProductService {
@@ -16,6 +17,8 @@ public interface ProductService {
 	Optional<Product> findById(Long id);
 	Page<Product> findAll(Pageable pageable);
 	List<Product> getProductsBySmallCategoryId(Long smallId);
+	List<ProductCategoryResponse> getProductCategories();
+//	ProductCategoryResponse getProductDetails(Long id);
 //	Page<Product> searchProductsByKeyword(String keyword, Pageable pageable);
 
 
