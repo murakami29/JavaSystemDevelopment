@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>小カテゴリ詳細</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .btn-row {
+	        margin-top: 20px;
+	    }
+		.btn-row .btn {
+		    width: 100%;
+		}
+		.btn-spacing {
+		    margin-bottom: 10px; /* ボタンの間のスペースを作る */
+		}
+	</style>
+</head>
+<body>
+    <div class="container mt-4">
+		<!-- エラーメッセージがある場合に表示 -->
+		<div th:if="${errorMessage}" class="alert alert-danger">
+		    <p th:text="${errorMessage}"></p>
+		</div>
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
+		<!-- カテゴリ名を動的に表示 -->
+		<h1 th:text="${largeCategory.name} + '＞' + ${middleCategory.name} + '＞' + ${smallCategory.name} + ' 詳細'"></h1>
+	        <table class="table table-striped">
+	            <thead>
+	                <tr>
+	                    <th>商品ID</th>
+	                    <th>メーカー</th>
+	                    <th>商品名</th>
+	                    <th>仕入れ原価</th>
+	                    <th>メーカ希望小売価格</th>
+	                    <th>作成日時</th>
+	                    <th>詳細</th>
+	                </tr>
+	            </thead>
+				
+	            <tbody>
+	                <tr th:each="product : ${productList}">
+	                    <td th:text="${product.id}">1</td>
+	                    <td th:text="${product.manufacturer.name}">202</td>
+	                    <td th:text="${product.name}">商品名</td>
+	                    <td th:text="${product.costPrice}">1000</td>
+	                    <td th:text="${product.manufacturerSuggestedRetailPrice}">1500</td>
+	                    <td th:text="${product.createdAt}">2023-01-01</td>
+	                    <td>
+							<a th:href="@{/category/list/large/{largeId}/middle/{middleId}/small/{smallId}/product/{productId}(largeId=${largeId}, middleId=${middleId}, smallId=${smallId}, productId=${product.id})}" class="btn btn-secondary">詳細</a>
+	                    </td>
+	                </tr>
+	            </tbody>
+	        </table>
+					
+		<div class="row btn-row">
+			<div class="col-md-6">
+				<a th:href="@{/category/list/large/{largeId}/middle/{middleId}/small(largeId=${largeId}, middleId=${middleId})}" class="btn btn-secondary">小カテゴリ一覧へ戻る</a>
+			</div>
+			<div class="col-md-6">
+				<a href="/home" class="btn btn-secondary">TOPページへ戻る</a>
+			</div>
+
+		</div>
+    </div>
+
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

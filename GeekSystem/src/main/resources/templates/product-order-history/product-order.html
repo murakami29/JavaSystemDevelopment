@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>商品詳細</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-row {
+            margin-top: 20px;
+        }
+        .btn-row .btn {
+            width: 100%;
+        }
+        .btn-spacing {
+            margin-bottom: 10px; /* ボタンの間のスペースを作る */
+        }
+        .pagination {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+		<!-- エラーメッセージがある場合に表示 -->
+		<div th:if="${errorMessage}" class="alert alert-danger">
+		    <p th:text="${errorMessage}"></p>
+		</div>
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>		
+        <h1>商品発注</h1>
+		
+		<form th:action="@{/product/order/{id}(id=${product.id})}" method="POST">
+			<input type="hidden" name="productId" th:value="${storeProductPrice.product.id}"> <!-- 商品IDの隠しフィールド -->
+			<input type="hidden" name="_csrf" th:value="${_csrf.token}"/> <!-- CSRFトークン -->
+
+			<!-- 商品情報 -->
+			<div class="form-group">
+                <label for="productName">商品名</label>
+                <input type="text" class="form-control" id="productName" th:value="${storeProductPrice.product.name}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="category">カテゴリ</label>
+                <input type="text" class="form-control" id="category" th:value="${storeProductPrice.product.smallCategory.middleCategory.name + ' - ' + storeProductPrice.product.smallCategory.name}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="manufacturer">メーカー</label>
+                <input type="text" class="form-control" id="manufacturer" th:value="${storeProductPrice.product.manufacturer.name}" readonly>
+            </div>
+
+			<!-- 販売価格 -->
+            <div class="form-group">
+                <label for="costPrice">仕入れ原価</label>
+                <input type="text" class="form-control" id="costPrice" th:value="${storeProductPrice.product.costPrice + '円'}" readonly>
+            </div>
+
+			<!-- 発注数 -->
+            <div class="form-group">
+                <label for="quantity">発注数</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+            </div>
+
+			<!-- 発注ボタンと戻るボタン -->
+			<div class="row btn-row">
+				<div class="col-md-6 btn-spacing">
+				    <button type="submit" class="btn btn-primary">発注する</button>
+				</div>
+				<div class="col-md-6">
+					<a href="/product/list" class="btn btn-secondary">商品一覧に戻る</a>
+				</div>
+			</div>
+        </form>
+	</div>
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
