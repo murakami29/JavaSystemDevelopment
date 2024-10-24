@@ -46,6 +46,11 @@ public class Store {
     @JsonIgnore // 無限ループを防ぐために追加
     private List<User> users;
     
+    // OrderHistoryとのリレーションを追加
+    @OneToMany(mappedBy = "store")
+    @JsonIgnore // 無限ループを防ぐために追加
+    private List<OrderHistory> orderHistories;
+    
     @Override
     public String toString() {
         return "Store{" +

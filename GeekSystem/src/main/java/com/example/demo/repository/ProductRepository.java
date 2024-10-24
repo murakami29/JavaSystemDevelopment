@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.demo.entity.Product;
+import com.example.demo.response.ProductCategoryResponse;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -39,5 +40,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                              @Param("keyword") String keyword);
     
     List<Product> findBySmallCategoryId(Long smallId);
-
+    
+ // 商品とカテゴリ情報を取得するためのメソッド
+    @Query("SELECT new com.example.demo.response.ProductCategoryResponse("
+         + "lc.name, "           // 大カテゴリ名
+         + "mc.name, "           // 中カテゴリ名
+         + "sc.name, "           // 小カテゴリ名
+         + "p.name, p.details, "  // 商品ID、商品名、商品の説明
+         + "p.costPrice, "              // 仕入れ原価
+         + "p.manufacturerSuggestedRetailPrice) " // メーカ希望小売価格
+         + "FROM Product p "
+         + "JOIN p.smallCategory sc "
+         + "JOIN sc.middleCategory mc "
+         + "JOIN mc.largeCategory lc")
+    List<ProductCategoryResponse> findAllProductCategories();
 }
