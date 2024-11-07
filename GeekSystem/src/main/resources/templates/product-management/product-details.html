@@ -63,6 +63,21 @@
 					    <img th:src="@{${product.productImage}}" alt="Product Image" />
 					</td>
                 </tr>
+				<tr>
+				    <th scope="row">
+						<span th:text="${storeName} + ':販売価格'"></span>
+					</th>
+					<td>
+					    <span th:if="${storeProductPrice != null}">
+					        <!-- 価格情報が存在する場合に表示 -->
+					        <span th:text="${storeProductPrice.price}"></span>
+					    </span>
+					    <span th:if="${storeProductPrice == null}">
+					        <!-- 価格情報が存在しない場合のメッセージ -->
+					        この店舗に対する価格情報がありません
+					    </span>
+					</td>
+				</tr>
                 <tr>
                     <th scope="row">仕入れ原価</th>
                     <td th:text="${product.costPrice}"></td>
@@ -71,21 +86,14 @@
                     <th scope="row">メーカ希望小売価格</th>
                     <td th:text="${product.manufacturerSuggestedRetailPrice}"></td>
                 </tr>
-                <tr>
-					<th scope="row">
-						<span th:text="${storeName} + ':商品在庫数'"></span>
-					</th>
-					<td>
-				        <span th:if="${product.storeProductInventories.size() > 0}">
-				            <!-- 在庫が存在する場合に表示 -->
-				            <span th:text="${product.storeProductInventories[0].productInventory != null ? product.storeProductInventories[0].productInventory : '在庫情報がありません'}"></span>
-				        </span>
-				        <span th:if="${product.storeProductInventories.size() == 0}">
-				            <!-- 在庫情報が存在しない場合のメッセージ -->
-				            在庫情報がありません
-				        </span>
-				    </td>
 				<tr>
+				    <th scope="row">
+				        <span th:text="${storeName} + ':商品在庫数'"></span>
+				    </th>
+				    <td>
+				        <span th:text="${storeProductInventory.productInventory}"></span>
+				    </td>
+				</tr>
 					<th scope="row">
 						<span th:text="${storeName} + ':最終発注日時'"></span>
 					</th>

@@ -24,12 +24,16 @@ import com.example.demo.entity.MiddleCategory;
 import com.example.demo.entity.OrderHistory;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.SmallCategory;
+import com.example.demo.entity.StoreProductInventory;
+import com.example.demo.entity.StoreProductPrice;
 import com.example.demo.entity.User;
 import com.example.demo.form.ProductSearchForm;
 import com.example.demo.repository.SmallCategoryRepository;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.OrderHistoryService;
 import com.example.demo.service.ProductService;
+import com.example.demo.service.StoreProductInventoryService;
+import com.example.demo.service.StoreProductPriceService;
 import com.example.demo.service.UserService;
 
 @Controller
@@ -46,6 +50,12 @@ public class ProductManagementController {
     
     @Autowired
     private OrderHistoryService orderHistoryService;
+    
+    @Autowired
+    private StoreProductInventoryService storeProductInventoryService;
+    
+    @Autowired
+    private StoreProductPriceService storeProductPriceService;
     
     @Autowired
     private SmallCategoryRepository smallCategoryRepository;
@@ -67,7 +77,24 @@ public class ProductManagementController {
         // キーワード検索
         List<Product> productList = productService.searchProductsByKeyword(keyword);
 
+//        // ログインしているユーザーを取得
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String currentUserName = auth.getName(); // ログイン中のユーザー名（Emailなど）
+//        
+//        // ユーザー名からUserエンティティを取得し、store_nameを取得
+//        Optional<User> optionalUser = userService.findByEmail(currentUserName); // Emailからユーザーを取得
+//        
+//        // ユーザーが存在する場合、ストアIDを取得
+//        if (optionalUser.isPresent()) {
+//        	User user = optionalUser.get(); // OptionalからUserを取得
+//            Long userStoreId = user.getStore().getId();
+//            String storeName = user.getStore().getName(); // 店舗名を取得
+//            model.addAttribute("userStoreId", userStoreId); // モデルにユーザーのストアIDを追加
+//            model.addAttribute("storeName", storeName);  // storeNameをモデルに追加
+//        }
+        
         ProductSearchForm searchForm = new ProductSearchForm();
+        
         model.addAttribute("searchForm", searchForm);
 
         // カテゴリのリストを取得してモデルに追加
@@ -139,8 +166,8 @@ public class ProductManagementController {
         }
     }
     
-    @GetMapping("/product/details/{id}")
-    public String showProductDetails(@PathVariable("id") Long productId, Model model) {
+    @GetMapping("/product/details/{productId}")
+    public String showProductDetails(@PathVariable("productId") Long productId, Model model) {
     	Optional<Product> productOptional = productService.findById(productId);
 
         if (productOptional.isEmpty()) {
@@ -162,7 +189,7 @@ public class ProductManagementController {
             model.addAttribute("orderHistory", null);
         }
         
-        model.addAttribute("storeProductInventories", product.getStoreProductInventories()); // store_product_inventory のデータ
+//        model.addAttribute("storeProductInventories", product.getStoreProductInventories()); // store_product_inventory のデータ
                
         // ログインしているユーザーを取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -173,9 +200,33 @@ public class ProductManagementController {
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get(); // OptionalからUserを取得
+            Long userStoreId = user.getStore().getId();
             String storeName = user.getStore().getName(); // getStoreName()を呼び出し
             // storeNameを使用して他の処理を行う
+            model.addAttribute("userStoreId", userStoreId);  // userStoreId をモデルに追加
             model.addAttribute("storeName", storeName);  // storeName をモデルに追加
+            
+            // ユーザーの店舗に紐づく価格情報を取得
+            Optional<StoreProductPrice> storeProductPriceOptional = storeProductPriceService.findByProductIdAndStoreId(productId, userStoreId);
+            if (storeProductPriceOptional.isPresent()) {
+                StoreProductPrice storeProductPrice = storeProductPriceOptional.get();
+                model.addAttribute("storeProductPrice", storeProductPrice);
+            } else {
+                model.addAttribute("priceMessage", "この店舗に対する価格情報がありません");
+            }
+
+         // ユーザーの店舗に紐づく在庫情報を取得
+            Optional<StoreProductInventory> storeProductInventoryOptional = storeProductInventoryService.findByProductAndStore(productId, userStoreId);
+            StoreProductInventory storeProductInventory;
+            if (storeProductInventoryOptional.isPresent()) {
+                storeProductInventory = storeProductInventoryOptional.get();
+            } else {
+                // 初期化されたStoreProductInventoryオブジェクトを作成（在庫0）
+                storeProductInventory = new StoreProductInventory();
+                storeProductInventory.setProductInventory(0);  // 初期値0
+                // 必要に応じて他のフィールドも設定
+            }
+            model.addAttribute("storeProductInventory", storeProductInventory);          
         } else {
             // Userが見つからない場合の処理
         	model.addAttribute("error", "ログインしているユーザーが見つかりませんでした");

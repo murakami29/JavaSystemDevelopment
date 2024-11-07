@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/resources/**", "/store/details").permitAll()
+                .requestMatchers("/login", "/resources/**", "/store/details", "/api/**").permitAll()
                 // 管理者権限が必要なURLを指定
                 .requestMatchers("/admin/edit/**", "/admin/delete/**", "/admin/create/**")
                 	.hasAuthority("ROLE_ADMIN")

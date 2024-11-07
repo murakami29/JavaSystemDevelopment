@@ -16,15 +16,21 @@ public class StoreProductPriceServiceImpl implements StoreProductPriceService {
     private StoreProductPriceRepository storeProductPriceRepository;
 
 	@Override
-    public StoreProductPrice findByProductIdAndStoreId(Long productId, Long storeId) {
+    public Optional<StoreProductPrice> findByProductIdAndStoreId(Long productId, Long storeId) {
 	    // StoreProductPriceIdを作成
 	    StoreProductPriceId id = new StoreProductPriceId();
 	    id.setProductId(productId);
 	    id.setStoreId(storeId);
 	    
         // 複合キーで価格情報を検索し、Optionalで返す
-    	Optional<StoreProductPrice> storeProductPriceOptional = storeProductPriceRepository.findById(id);
+	    return storeProductPriceRepository.findById(id);
+	}
+//	    Optional<StoreProductPrice> storeProductPriceOptional = storeProductPriceRepository.findById(id);
     	// 価格情報が見つからなかった場合は例外をスロー
-    	return storeProductPriceOptional.orElseThrow(() -> new RuntimeException("価格情報が見つかりませんでした: productId=" + productId + ", storeId=" + storeId));
+//    	return storeProductPriceOptional.orElseThrow(() -> new RuntimeException("価格情報が見つかりませんでした: productId=" + productId + ", storeId=" + storeId));
+	    // 例外をスローする既存メソッド
+	    public StoreProductPrice findByProductIdAndStoreIdOrThrow(Long productId, Long storeId) {
+	        return findByProductIdAndStoreId(productId, storeId)
+	            .orElseThrow(() -> new RuntimeException("価格情報が見つかりませんでした: productId=" + productId + ", storeId=" + storeId));
     }
 }
