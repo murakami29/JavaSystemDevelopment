@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理者プロフィール編集</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .btn-row {
+	        margin-top: 20px;
+	    }
+		.btn-row .btn {
+		    width: 100%;
+		}
+		.btn-spacing {
+		    margin-bottom: 10px; /* ボタンの間のスペースを作る */
+		}
+	</style>
+	</head>
+<body>
+    <div class="container mt-4">
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
+        <h1>管理者プロフィール編集</h1>
+        <form th:action="@{/admin/profile/edit}" method="post">
+			<input type="hidden" name="id" th:value="${adminProfile.id}"> <!--隠しフィールド-->
+			<input type="hidden" name="_csrf" value="${_csrf.token}"/>
+			<div class="form-group">
+                <label for="userId">ユーザーID</label>
+                <input type="text" class="form-control" id="userId" th:value="${adminProfile.id}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="store">店舗名</label>
+                <select id="store" class="form-control" name="storeId">
+                    <option th:each="store : ${stores}" th:value="${store.id}" th:text="${store.name}" th:selected="${store.id == adminProfile.store.id}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="role">役職名</label>
+                <select id="role" class="form-control" name="roleId">
+                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${role.id == adminProfile.role.id}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="permission">権限名</label>
+                <select id="permission" class="form-control" name="permissionId">
+                    <option th:each="permission : ${permissions}" th:value="${permission.id}" th:text="${permission.name}" th:selected="${permission.id == adminProfile.permission.id}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="firstName">名</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" th:value="${adminProfile.firstName}">
+            </div>
+            <div class="form-group">
+                <label for="lastName">姓</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" th:value="${adminProfile.lastName}">
+            </div>
+            <div class="form-group">
+                <label for="email">メールアドレス</label>
+                <input type="email" class="form-control" id="email" name="email" th:value="${adminProfile.email}">
+            </div>
+            <div class="form-group">
+                <label for="phone">電話番号</label>
+                <input type="text" class="form-control" id="phone" name="phone" th:value="${adminProfile.phone}">
+			</div>
+			<div class="row btn-row">
+				<div class="col-md-6 btn-spacing">
+				    <button type="submit" class="btn btn-primary">更新する</button>
+				</div>
+				<div class="col-md-6">
+					<a href="/admin/profile/details" class="btn btn-secondary">プロフィール詳細へ戻る</a>
+				</div>
+			</div>
+        </form>
+    </div>
+	
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

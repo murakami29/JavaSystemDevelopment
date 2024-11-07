@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>メーカ新規作成完了</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-row {
+            margin-top: 20px;
+        }
+        .btn-row .btn {
+            width: 100%;
+        }
+        .btn-spacing {
+            margin-bottom: 10px; /* ボタンの間のスペースを作る */
+        }
+		
+        p {
+            font-size: 1.2em;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+        }
+        
+        p {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+		<div class="d-flex justify-content-end mb-4">
+			<form th:action="@{/logout}" method="post">
+			    <input type="submit" value="ログアウト">
+			</form>
+		</div>
+        <h1>メーカ新規作成完了</h1>
+        <p>メーカ情報の新規作成が完了しました。</p>
+        <div class="row btn-row">
+            <div class="col-md-6">
+				<a href="/manufacturer/list" class="btn btn-secondary btn-block">メーカ一覧へ戻る</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BootstrapのJavaScript (オプション) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
