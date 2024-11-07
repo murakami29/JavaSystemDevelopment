@@ -146,27 +146,33 @@
 				
 		        const start = (currentPage - 1) * itemsPerPage;
 		        const end = start + itemsPerPage;
-				const displayProducts = productsContent.slice(0, itemsPerPage); // 指定されたページの商品だけ表示
+				const displayProducts = productsContent.slice(start, end); // 指定されたページの商品だけ表示
 		
 		        if (displayProducts.length > 0) {
 					displayProducts.forEach(product => {
-		                const row = `
-		                    <tr>
-								<td>${product.id}</td>
-								<td>${product.smallCategory.name}</td>
-								<td>${product.manufacturer.name}</td>
-								<td>${product.name}</td>
-								<td>${product.costPrice}</td>
-								<td>${product.manufacturerSuggestedRetailPrice}</td>
-								<td>${product.createdAt}</td>
-								<td><a href="/product/details/${product.id}" class="btn btn-secondary">詳細</a></td>
-		                    </tr>
-		                `;
-		                tbody.append(row);
+						if (product && product.id) {
+			                const row = `
+			                    <tr>
+									<td>${product.id}</td>
+									<td>${product.smallCategory.name}</td>
+									<td>${product.manufacturer.name}</td>
+									<td>${product.name}</td>
+									<td>${product.costPrice}</td>
+									<td>${product.manufacturerSuggestedRetailPrice}</td>
+									<td>${product.createdAt}</td>
+									<td><a href="/product/details/${product.id}" class="btn btn-secondary">詳細</a></td>
+			                    </tr>
+			                `;
+			                tbody.append(row);
+						} else {
+						    console.error('Invalid product:', product);
+						}
 		            });
 		        } else {
 		            tbody.append('<tr><td colspan="7" class="text-center">商品がありません。</td></tr>');
 		        }
+			} else {
+			    console.error('Product list is not an array:', productList);
 			}
 	    }
 	

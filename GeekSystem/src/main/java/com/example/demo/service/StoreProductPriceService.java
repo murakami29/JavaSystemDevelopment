@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import com.example.demo.entity.StoreProductPrice;
 
 public interface StoreProductPriceService {
 	
-	StoreProductPrice findByProductIdAndStoreId(Long productId, Long storeId);
+	Optional<StoreProductPrice> findByProductIdAndStoreId(Long productId, Long storeId);
+	
 }

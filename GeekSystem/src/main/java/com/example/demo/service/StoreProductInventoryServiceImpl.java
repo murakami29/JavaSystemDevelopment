@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class StoreProductInventoryServiceImpl implements StoreProductInventorySe
     
  // 商品IDと店舗IDに基づいて在庫情報を取得するメソッドを実装
     @Override
-    public StoreProductInventory findByProductAndStore(Long productId, Long storeId) {
+    public Optional<StoreProductInventory> findByProductAndStore(Long productId, Long storeId) {
         return storeProductInventoryRepository.findByProductIdAndStoreId(productId, storeId);
     }
 
@@ -36,10 +37,11 @@ public class StoreProductInventoryServiceImpl implements StoreProductInventorySe
     @Override
     public void updateInventory(Long productId, Long storeId, int quantity) {
         // 商品IDと店舗IDに基づいて在庫情報を取得
-        StoreProductInventory inventory = storeProductInventoryRepository.findByProductIdAndStoreId(productId, storeId);
+    	Optional<StoreProductInventory> inventoryOptional = storeProductInventoryRepository.findByProductIdAndStoreId(productId, storeId);
 
-        if (inventory != null) {
+        if (inventoryOptional.isPresent()) {
             // 在庫数に注文数を加算して更新
+        	StoreProductInventory inventory = inventoryOptional.get();
             inventory.setProductInventory(inventory.getProductInventory() + quantity);
             storeProductInventoryRepository.save(inventory);  // 在庫情報を更新
         } else {

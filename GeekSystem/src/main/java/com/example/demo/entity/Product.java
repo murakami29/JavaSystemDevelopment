@@ -72,6 +72,10 @@ public class Product {
     
     @OneToMany(mappedBy = "product")
     @JsonIgnore
+    private List<StoreProductPrice> storeProductPrices;
+    
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<OrderHistory> orderHistories;
     
     @Override

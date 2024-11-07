@@ -74,18 +74,26 @@ public class OrderHistoryController {
 		Long storeId = userDetails.getStoreId(); // ログインユーザーに紐付く店舗IDを取得        
 
 		// 店舗IDと商品IDから価格情報を取得
-		StoreProductPrice storeProductPrice = storeProductPriceService.findByProductIdAndStoreId(productId, storeId);
+		Optional<StoreProductPrice> storeProductPriceOptional = storeProductPriceService.findByProductIdAndStoreId(productId, storeId);
 		
 		// 店舗IDと商品IDから在庫情報を取得
-	    StoreProductInventory storeProductInventory = storeProductInventoryService.findByProductAndStore(productId, storeId);
+		Optional<StoreProductInventory> storeProductInventoryOptional = storeProductInventoryService.findByProductAndStore(productId, storeId);
 	    
-	    System.out.println("Price: " + storeProductPrice);  // デバッグログ出力
-	    System.out.println("Inventory: " + storeProductInventory);  // デバッグログ出力
+	    System.out.println("Price: " + storeProductPriceOptional);  // デバッグログ出力
+	    System.out.println("Inventory: " + storeProductInventoryOptional);  // デバッグログ出力
 
+	    // 価格情報が存在しない場合
+	    if (storeProductPriceOptional.isEmpty()) {
+	        return handleError("価格情報が見つかりませんでした", model);
+	    }
 	    // 在庫数が存在しない場合の処理（在庫情報が存在しないケース）
-	    if (storeProductInventory == null) {
+	    if (storeProductInventoryOptional.isEmpty()) {
 	        return handleError("在庫情報が見つかりませんでした", model);
 	    }
+	    
+	    // 価格と在庫情報を取得
+	    StoreProductPrice storeProductPrice = storeProductPriceOptional.get();
+	    StoreProductInventory storeProductInventory = storeProductInventoryOptional.get();
 	    
 		// フォームを初期化
 		ProductOrderForm productOrderForm = new ProductOrderForm();
@@ -128,10 +136,11 @@ public class OrderHistoryController {
 		Product product = productOptional.get();
 
 		// 店舗と商品の価格情報を取得
-		StoreProductPrice storeProductPrice = storeProductPriceService.findByProductIdAndStoreId(productId, storeId);
-		if (storeProductPrice == null) {
+		Optional<StoreProductPrice> storeProductPriceOptional = storeProductPriceService.findByProductIdAndStoreId(productId, storeId);
+		if (storeProductPriceOptional.isEmpty()) {
 			return handleError("店舗の商品価格情報が見つかりませんでした", model);
 		}
+		StoreProductPrice storeProductPrice = storeProductPriceOptional.get(); // 価格情報を取得
 
 		// ユーザー情報の取得
 		Optional<User> userOptional = userService.findById(userId);
@@ -141,16 +150,17 @@ public class OrderHistoryController {
 		User user = userOptional.get(); // ユーザー情報を取得
 		
 		// 店舗と商品の在庫情報を取得
-	    StoreProductInventory inventory = storeProductInventoryService.findByProductAndStore(productId, storeId);
-	    if (inventory == null) {
+		Optional<StoreProductInventory> inventoryOptional = storeProductInventoryService.findByProductAndStore(productId, storeId);
+	    if (inventoryOptional.isEmpty()) {
 	        return handleError("在庫情報が見つかりませんでした", model);
 	    }
+	    StoreProductInventory storeProductInventory = inventoryOptional.get();
 	    
 	    // 発注数を取得
 	    int orderQuantity = productOrderForm.getQuantity(); // ユーザーからの入力または他のロジックから取得する
 
 	    // 現在の在庫数を取得
-	    int currentInventory = inventory.getProductInventory();
+	    int currentInventory = storeProductInventory.getProductInventory();
 
 	    // 更新後の在庫数を計算（発注数を加算）
 	    int updatedInventory = currentInventory + orderQuantity; // 発注数を加算
